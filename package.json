@@ -1,0 +1,44 @@
+{
+  "name": "dsh-customs-mcp",
+  "version": "0.1.0",
+  "mcpName": "io.github.PerryLink/dsh-customs",
+  "description": "Read-only MCP server that checks a Chinese customs declaration ledger for internal inconsistency.",
+  "type": "module",
+  "bin": {
+    "dsh-customs-mcp": "src/index.js"
+  },
+  "files": [
+    "src",
+    "server.json",
+    "README.md",
+    "README-zh.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node test/smoke.mjs"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "customs",
+    "customs-declaration",
+    "hs-code",
+    "trade-compliance",
+    "chinese"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PerryLink/dsh-customs-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PerryLink/dsh-customs-mcp/issues"
+  },
+  "homepage": "https://github.com/PerryLink/dsh-customs-mcp#readme",
+  "author": "PerryLink"
+}

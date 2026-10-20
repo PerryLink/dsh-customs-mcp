@@ -1,0 +1,15 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.PerryLink/dsh-customs",
+  "description": "Read-only MCP server that checks a Chinese customs declaration ledger for internal inconsistency.",
+  "title": "Customs Declaration Consistency",
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "dsh-customs-mcp",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" }
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+name: publish
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write # GitHub Release
+  id-token: write # npm provenance
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      # No install step: the package declares no dependencies on purpose, so a
+      # lockfile problem can never be mistaken for a release problem.
+      - name: Smoke test the protocol surface
+        run: node test/smoke.mjs
+      - name: Assert the manifests agree before publishing
+        run: node scripts/check-registry-drift.mjs
+
+  publish:
+    # A tag push is the normal path, but workflow_dispatch must ALSO reach this
+    # job: it is the only way to re-drive the registry publish for a version that
+    # npm already has. The guard used to be `startsWith(github.ref,
+    # 'refs/tags/v')` alone in a sibling repo, so dispatch skipped `publish`,
+    # `mcp-registry` skipped with it, and the run still reported green while the
+    # registry served a week-old version.
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          # No registry-url: it writes an empty _authToken into .npmrc and the
+          # registry then answers 404 on PUT instead of letting npm do OIDC.
+      - name: Verify the tag matches the package version
+        shell: bash
+        run: |
+          tag="v$(node -p "require('./package.json').version")"
+          if [ "${GITHUB_EVENT_NAME}" != "workflow_dispatch" ] && [ "${GITHUB_REF_NAME}" != "${tag}" ]; then
+            echo "tag ${GITHUB_REF_NAME} does not match package version ${tag}"
+            exit 1
+          fi
+      - name: Upgrade npm
+        shell: bash
+        run: |
+          npm install -g npm@^11.5.1
+          echo "npm: $(npm --version)"
+          if [ -n "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]; then echo "OIDC request TOKEN: present"; else echo "OIDC request TOKEN: MISSING"; fi
+      - name: Publish to npm
+        shell: bash
+        env:
+          NPM_CONFIG_LOGLEVEL: verbose
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if npm view "dsh-customs-mcp@${version}" version >/dev/null 2>&1; then
+            echo "dsh-customs-mcp@${version} is already published; skipping npm publish"
+            exit 0
+          fi
+          # A tag push and a dispatch can race (different refs, so the concurrency
+          # group does not serialize them). If the other run wins, the registry
+          # answers EPUBLISHCONFLICT; that is success for this run.
+          set +e
+          out="$(npm publish --access public --provenance 2>&1)"
+          status=$?
+          set -e
+          printf '%s\n' "$out"
+          if [ "$status" -eq 0 ]; then exit 0; fi
+          if printf '%s' "$out" | grep -qE 'EPUBLISHCONFLICT|previously published'; then
+            echo "dsh-customs-mcp@${version} was already published by a concurrent run; treating this as done"
+            exit 0
+          fi
+          exit "$status"
+      - name: Resolve the release tag
+        id: release-tag
+        shell: bash
+        run: echo "tag=v$(node -p "require('./package.json').version")" >> "${GITHUB_OUTPUT}"
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.release-tag.outputs.tag }}
+          generate_release_notes: true
+
+  # Publishes server.json to the official MCP Registry. It needs `publish` (the
+  # registry verifies npm ownership through package.json#mcpName on the published
+  # package) and is its own job, so a registry hiccup cannot cost the GitHub
+  # Release the publish job has just created.
+  mcp-registry:
+    needs: publish
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/publish-mcp.yml

@@ -2,7 +2,7 @@
 
 A read-only MCP server that checks a Chinese customs declaration ledger for internal inconsistency.
 
-It takes the ledger a declarant already keeps — one row per document line — and reports where the rows disagree with each other or with the pack's declared format checks: a 9-digit HS code, a currency that is not a three-letter code, gross weight below net weight, a document number used twice, a date that does not parse, an unfilled placeholder.
+It takes the ledger a declarant already keeps — one row per document line — and reports where the rows disagree with each other or with the pack's declared format checks: an HS code that is not ten digits, a currency that is not a three-letter code, gross weight below net weight, a document number used twice, a date that does not parse, an unfilled placeholder.
 
 It does not decide whether a declaration is correct, whether goods are misclassified, or whether duty is owed.
 

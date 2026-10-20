@@ -37,7 +37,7 @@ const TOOLS = [
     description:
       'Run the customs declaration rule pack over a declaration ledger and return the findings as a Markdown report. ' +
       'The input is a JSON or YAML table: one row per document line, with columns such as 品名 (description), 商品编号 (HS code), 币制 (currency), 毛重/净重 (gross/net weight), 申报日期 (declaration date) and 总价 (total value). Call customs_schema for the exact field names and their aliases. ' +
-      'The report lists only literal differences from the declared checks — a 9-digit HS code, a currency that is not a 3-letter code, gross weight below net weight, a duplicated document number, a date that does not parse or is in the future, an unfilled placeholder. Each finding carries the clause it rests on, or states that the clause text was not obtained. ' +
+      'The report lists only literal differences from the declared checks — an HS code that is not ten digits, a currency that is not a 3-letter code, gross weight below net weight, a duplicated document number, a date that does not parse or is in the future, an unfilled placeholder. Each finding carries the clause it rests on, or states that the clause text was not obtained. ' +
       'It does NOT decide whether a declaration is correct, whether goods are misclassified, or whether duty is owed. It performs no writes and needs no credentials. ' +
       'Read the "未执行的检查" (checks not executed) section at the end: it names every rule that did not run and why, and a report is only as complete as that list allows.',
     annotations: ANNOTATIONS_READ_ONLY,
@@ -65,7 +65,7 @@ const TOOLS = [
       'Extract text from a .docx file so it can be turned into a ledger for customs_check. Paragraphs come out one per line; table rows come out as "| a | b | c |" lines. ' +
       'Merged cells are marked "↔", meaning "this cell is merged with the one to its left and holds no value of its own" — do not read it as a missing value. A vertically merged cell repeats the value above it, which is what a reader of the document sees. ' +
       'Reads exactly the one path given, opens it read-only, and refuses anything larger than 20 MB. No other file is touched, no network is used, nothing is written. ' +
-      'Only .docx (and any extension-less OOXML package) is supported: legacy .doc/.wps are a different binary format and PDF is not parsed on purpose — a PDF table loses its cell structure, and guessing it produces a ledger that is wrong in ways the check cannot detect.',
+      'Only a path ending in .docx is accepted: legacy .doc/.wps are a different binary format and PDF is not parsed on purpose — a PDF table loses its cell structure, and guessing it produces a ledger that is wrong in ways the check cannot detect.',
     annotations: ANNOTATIONS_READ_ONLY,
     inputSchema: {
       type: 'object',
@@ -82,7 +82,7 @@ const TOOLS = [
     name: 'customs_schema',
     title: 'Show the ledger column contract',
     description:
-      'Return the column contract for customs_check: the accepted field names, every alias each field answers to (for example 分值-style Chinese headers and their English names), and the header-level fields. ' +
+      'Return the column contract for customs_check: the accepted field names, every alias each field answers to (for example 品名 / goodsName, 币制 / currency), and the header-level fields. ' +
       'Call this first when assembling a ledger, because a column name the reader does not recognise is silently dropped and the corresponding rule then reports nothing. ' +
       'Read-only, no parameters, no network, no writes.',
     annotations: ANNOTATIONS_READ_ONLY,

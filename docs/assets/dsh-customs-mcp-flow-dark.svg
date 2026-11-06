@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-label="dsh-customs-mcp data flow">
+<title>dsh-customs-mcp data flow</title>
+<rect width="1280" height="420" rx="18" fill="#0d1117"/>
+<text x="60" y="62" fill="#f0f6fc" font-family="ui-sans-serif,system-ui,sans-serif" font-size="30" font-weight="700">dsh-customs-mcp</text>
+<text x="60" y="94" fill="#8b949e" font-family="ui-monospace,monospace" font-size="16">stdio JSON-RPC · read-only · no network · no writes</text>
+<line x1="60" y1="116" x2="1220" y2="116" stroke="#30363d"/>
+<rect x="60" y="150" width="204" height="96" rx="14" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+<text x="162" y="190" fill="#f0f6fc" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" font-weight="700">.docx</text>
+<text x="162" y="218" fill="#8b949e" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12">read-only · max 20 MB</text>
+<path d="M270 198h23" stroke="#8b949e" stroke-width="3"/>
+<path d="M291 191l10 7-10 7" fill="none" stroke="#8b949e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="299" y="150" width="204" height="96" rx="14" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+<text x="401" y="190" fill="#f0f6fc" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" font-weight="700">customs_read_docx</text>
+<text x="401" y="218" fill="#8b949e" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12">paragraphs · | cells |</text>
+<path d="M509 198h23" stroke="#8b949e" stroke-width="3"/>
+<path d="M530 191l10 7-10 7" fill="none" stroke="#8b949e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="538" y="150" width="204" height="96" rx="14" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+<text x="640" y="190" fill="#f0f6fc" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" font-weight="700">ledger</text>
+<text x="640" y="218" fill="#8b949e" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12">JSON/YAML · rows[]</text>
+<path d="M748 198h23" stroke="#8b949e" stroke-width="3"/>
+<path d="M769 191l10 7-10 7" fill="none" stroke="#8b949e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="777" y="150" width="204" height="96" rx="14" fill="#161b22" stroke="#4B67B4" stroke-width="2"/>
+<text x="879" y="190" fill="#f0f6fc" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" font-weight="700">customs_check</text>
+<text x="879" y="218" fill="#8b949e" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12">CD-001...CD-007</text>
+<path d="M987 198h23" stroke="#8b949e" stroke-width="3"/>
+<path d="M1008 191l10 7-10 7" fill="none" stroke="#8b949e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1016" y="150" width="204" height="96" rx="14" fill="#161b22" stroke="#3fb950" stroke-width="2"/>
+<text x="1118" y="190" fill="#f0f6fc" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" font-weight="700">report</text>
+<text x="1118" y="218" fill="#8b949e" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12">明细 + 未执行的检查</text>
+<path d="M401 246v39" stroke="#4B67B4" stroke-width="2" stroke-dasharray="5 5"/>
+<path d="M879 246v39" stroke="#4B67B4" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="299" y="285" width="921" height="52" rx="12" fill="#161b22" stroke="#4B67B4" stroke-width="2"/>
+<text x="759" y="318" fill="#f0f6fc" text-anchor="middle" font-family="ui-monospace,monospace" font-size="14">customs_schema: columns + aliases · customs_rulebook: CD-001...CD-007 · verbatimClause 0/7</text>
+<text x="60" y="392" fill="#8b949e" font-family="ui-monospace,monospace" font-size="13">report = 明细 + 未执行的检查 + disclaimer · severity capped at warn · 0 of 7 rules quote a clause</text>
+</svg>

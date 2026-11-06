@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-flow-dark.svg">
-  <img src="docs/assets/dsh-customs-mcp-flow-light.svg" width="100%" alt="dsh-customs-mcp 数据流：.docx → customs_read_docx → 台账 rows[] → customs_check → 报告（明细 + 未执行的检查）；customs_schema 给出列名契约与别名，customs_rulebook 给出 7 条规则与覆盖率">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-hero-zh-dark.webp">
+  <img src="docs/assets/dsh-customs-mcp-hero-zh-light.webp" width="100%" alt="dsh-customs-mcp 配图：左侧标题「台账自洽核对」；右侧是 MCP 客户端 ↔ stdio JSON-RPC 协议面 ↔ 服务端四个工具（customs_schema / customs_rulebook / customs_read_docx / customs_check），底部结果带写着「结果：Markdown 报告 = 明细 + 未执行的检查」">
 </picture>
 
 # dsh-customs-mcp
@@ -34,6 +34,11 @@ npx -y dsh-customs-mcp     # 或者免安装直接跑
 这个 server 只做一件事：拿一份你已经整理好的报关台账，逐行核对它跟自己有没有矛盾。输入是台账本身（`{ "rows": [...] }` 或裸数组，JSON / YAML 都行），输出是一份 Markdown 报告——每条命中都带行号、字段名、实际值、依据要求、条款依据与建议核对方向，报告末尾永远有一段「未执行的检查」，把没跑的规则和原因列清楚。
 
 它不判断申报是否真实、归类是否恰当、是否应当缴税。这些是海关与归类专业人员的判断，也是这个工具刻意不做的部分。
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-customs-mcp-flow-v5-light.svg" width="100%" alt="结构图：两条材料来路——台账 JSON / YAML 直入，.docx 经 customs_read_docx 取文后整理成台账——汇入 check.mjs 一条引擎：68 个别名映射到 17 个行字段、5 个表头字段，再跑 7 条规则（全部 warn）；出口固定两节「## 明细」与「## 未执行的检查」，经措辞闸门渲染成 Markdown 报告">
+</picture>
 
 ## 三步上手
 
@@ -279,11 +284,11 @@ node src/check.mjs --schema                        # 列名契约与全部别名
 node src/check.mjs --rulebook                      # 规则清单 + coverage
 node src/check.mjs test/fixtures/ledger-bad.json   # 命中 6 条，退出码 1；--json 出结构化报告
 
-python scripts/gen-readme-assets.py                # 重新生成 docs/assets 的深浅双版流程图（需 Pillow）
+python scripts/gen-readme-assets.py                # 重新生成 docs/assets 的 hero（webp）与结构图（svg）（需 Pillow）
 docker build -t dsh-customs-mcp .                  # 可选：node:22-alpine 镜像，入口 src/index.js
 ```
 
-没有 `npm install`，也没有构建步骤：仓内零依赖，`src/` 即发布产物。README 配图由 [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) 程序化生成（Pillow + CJK 字体探测，图内只有命令 token），可重复执行。
+没有 `npm install`，也没有构建步骤：仓内零依赖，`src/` 即发布产物。README 配图由 [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) 程序化生成（Pillow 画 hero、手写 SVG 画结构图，带 CJK 字体探测），可重复执行。
 
 目录布局：
 
@@ -295,7 +300,7 @@ src/docx.mjs     .docx 取文：段落逐行、表格行、合并单元格标记
 test/smoke.mjs   冒烟测试：清单一致、协议应答、四个工具、拒收路径、无网络无写入
 server.json      MCP registry 清单（name/version 与 package.json 对齐）
 scripts/gen-readme-assets.py  README 配图生成
-docs/assets/     深浅双版流程图
+docs/assets/     深浅双版 hero 与结构图
 ```
 
 ## 家族与致谢

@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-flow-dark.svg">
-  <img src="docs/assets/dsh-customs-mcp-flow-light.svg" width="100%" alt="dsh-customs-mcp डेटा प्रवाह: .docx → customs_read_docx → बहीखाता rows[] → customs_check → रिपोर्ट (निष्कर्ष और न चलाई गई जाँचें); customs_schema कॉलम अनुबंध और उपनाम देता है, customs_rulebook सात नियम और उनकी कवरेज देता है">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-hero-en-dark.webp">
+  <img src="docs/assets/dsh-customs-mcp-hero-en-light.webp" width="100%" alt="dsh-customs-mcp हीरो: बाईं ओर क्लाइंट सत्र, बीच में stdio JSON-RPC सीमा, दाईं ओर सर्वर के चार टूल (customs_schema, customs_rulebook, customs_read_docx, customs_check), और नीचे Markdown रिपोर्ट — निष्कर्ष + न चलाई गई जाँचें">
 </picture>
 
 # dsh-customs-mcp
@@ -34,6 +34,11 @@ npx -y dsh-customs-mcp     # या बिना इंस्टॉल किए
 यह सर्वर एक ही काम करता है: आपका बनाया हुआ सीमा शुल्क बहीखाता लेकर पंक्ति-दर-पंक्ति जाँचता है कि बहीखाता अपने ही विरुद्ध है या नहीं। इनपुट बहीखाता ही है (`{ "rows": [...] }` या सीधा array; JSON और YAML दोनों चलते हैं)। आउटपुट एक Markdown रिपोर्ट है जिसमें हर निष्कर्ष के साथ पंक्ति संख्या, फ़ील्ड नाम, मिला हुआ मान, जाँच की अपेक्षा, जिस धारा पर वह टिका है, और कहाँ देखें इसका सुझाव होता है; रिपोर्ट के अंत में हमेशा वह खंड आता है जो बताता है कि कौन-सी जाँचें चली ही नहीं और क्यों।
 
 यह तय नहीं करता कि घोषणा सच है, वर्गीकरण सही है, या शुल्क बकाया है। वे फ़ैसले सीमा शुल्क और वर्गीकरण विशेषज्ञों के हैं, और उन्हें न करना जानबूझकर है।
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-customs-mcp-flow-v5-light.svg" width="100%" alt="संरचना: दो प्रवेश — सीधा JSON/YAML बहीखाता, और .docx जिसे customs_read_docx पढ़कर बहीखाता बनाया जाता है — एक check.mjs इंजन में मिलते हैं: 68 उपनाम से 17 पंक्ति फ़ील्ड और 5 हेडर फ़ील्ड, फिर सात नियम (सभी warn); आउटपुट दो निश्चित खंड — निष्कर्ष और न चलाई गई जाँचें — शब्द-द्वार से गुज़रकर एक Markdown रिपोर्ट">
+</picture>
 
 ## तीन चरणों में शुरुआत
 
@@ -288,11 +293,11 @@ node src/check.mjs --schema                        # कॉलम अनुब�
 node src/check.mjs --rulebook                      # नियम और कवरेज
 node src/check.mjs test/fixtures/ledger-bad.json   # 6 निष्कर्ष, एक्ज़िट कोड 1; --json से संरचित रिपोर्ट
 
-python scripts/gen-readme-assets.py                # docs/assets के लाइट/डार्क चित्र फिर बनाएँ (Pillow)
+python scripts/gen-readme-assets.py                # docs/assets में hero webp और संरचना SVG फिर बनाएँ (Pillow)
 docker build -t dsh-customs-mcp .                  # वैकल्पिक: node:22-alpine इमेज, प्रवेश src/index.js
 ```
 
-न `npm install` है, न कोई बिल्ड चरण: रेपो में शून्य निर्भरता है और `src/` ही प्रकाशित सामग्री है। README के चित्र [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) से बनते हैं (Pillow और CJK फ़ॉन्ट जाँच; चित्र में केवल कमांड टोकन हैं) और स्क्रिप्ट दोबारा चलाना सुरक्षित है।
+न `npm install` है, न कोई बिल्ड चरण: रेपो में शून्य निर्भरता है और `src/` ही प्रकाशित सामग्री है। README के चित्र [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) से बनते हैं (hero Pillow से, संरचना हाथ से लिखे SVG से, और CJK फ़ॉन्ट जाँच के साथ) और स्क्रिप्ट दोबारा चलाना सुरक्षित है।
 
 संरचना:
 
@@ -304,7 +309,7 @@ src/docx.mjs     .docx टेक्स्ट निष्कर्षण: अन
 test/smoke.mjs   स्मोक टेस्ट: मैनिफ़ेस्ट मेल, प्रोटोकॉल जवाब, चारों टूल, अस्वीकृतियाँ, नेटवर्क नहीं, लेखन नहीं
 server.json      MCP रजिस्ट्री मैनिफ़ेस्ट (name/version package.json के साथ)
 scripts/gen-readme-assets.py  README चित्र जनरेटर
-docs/assets/     चित्र के लाइट और डार्क रूप
+docs/assets/     लाइट/डार्क hero और संरचना चित्र
 ```
 
 ## परिवार और आभार

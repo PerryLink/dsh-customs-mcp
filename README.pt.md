@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-flow-dark.svg">
-  <img src="docs/assets/dsh-customs-mcp-flow-light.svg" width="100%" alt="Fluxo de dados do dsh-customs-mcp: .docx → customs_read_docx → livro rows[] → customs_check → relatório (achados e verificações não executadas); customs_schema devolve o contrato de colunas e seus apelidos, customs_rulebook devolve as sete regras e a cobertura">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-hero-en-dark.webp">
+  <img src="docs/assets/dsh-customs-mcp-hero-en-light.webp" width="100%" alt="Capa do dsh-customs-mcp: sessão do cliente à esquerda, a fronteira stdio JSON-RPC no meio, as quatro ferramentas do servidor (customs_schema, customs_rulebook, customs_read_docx, customs_check) à direita e o relatório Markdown — achados + verificações não executadas — voltando ao cliente">
 </picture>
 
 # dsh-customs-mcp
@@ -34,6 +34,11 @@ npx -y dsh-customs-mcp     # ou rodar sem instalar nada
 O servidor faz uma coisa só: pega um livro aduaneiro que você já montou e confere, linha por linha, se o livro contradiz a si mesmo. A entrada é o próprio livro (`{ "rows": [...] }` ou um array simples; JSON e YAML valem igual). A saída é um relatório Markdown em que cada achado traz número de linha, nome do campo, valor encontrado, o que a verificação esperava, a cláusula em que se apoia e uma sugestão de onde olhar; o relatório sempre termina com uma seção que lista as verificações que não rodaram e por quê.
 
 Não decide se uma declaração é verdadeira, se uma classificação está correta nem se há tributo a pagar. Isso cabe à aduana e aos especialistas em classificação, e não decidir é deliberado.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-customs-mcp-flow-v5-light.svg" width="100%" alt="Estrutura: duas entradas — o livro JSON/YAML direto e o .docx lido por customs_read_docx e montado em livro — convergem num motor check.mjs: 68 apelidos para 17 campos de linha e 5 de cabeçalho, depois as sete regras (todas warn); a saída são duas seções fixas — achados e verificações não executadas — após o portão de redação, num relatório Markdown">
+</picture>
 
 ## Instalação em três passos
 
@@ -288,11 +293,11 @@ node src/check.mjs --schema                        # o contrato de colunas e tod
 node src/check.mjs --rulebook                      # as regras e a cobertura
 node src/check.mjs test/fixtures/ledger-bad.json   # 6 achados, código de saída 1; --json para relatório estruturado
 
-python scripts/gen-readme-assets.py                # regenera os diagramas claro/escuro em docs/assets (Pillow)
+python scripts/gen-readme-assets.py                # regenera os hero webp e os SVG de estrutura em docs/assets (Pillow)
 docker build -t dsh-customs-mcp .                  # opcional: imagem node:22-alpine, entrada src/index.js
 ```
 
-Não há `npm install` nem etapa de build: o repositório não tem dependências e `src/` é o que se publica. Os diagramas do README são gerados por [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) (Pillow e uma sonda de fonte CJK; o diagrama carrega apenas tokens de comando) e o script pode ser executado de novo sem risco.
+Não há `npm install` nem etapa de build: o repositório não tem dependências e `src/` é o que se publica. As imagens do README são geradas por [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) (o Pillow desenha os hero, a estrutura é SVG escrito à mão e há uma sonda de fonte CJK) e o script pode ser executado de novo sem risco.
 
 Estrutura:
 
@@ -304,7 +309,7 @@ src/docx.mjs     extração de texto .docx: parágrafos, linhas de tabela, marca
 test/smoke.mjs   teste de fumaça: manifestos, respostas do protocolo, quatro ferramentas, recusas, sem rede nem escritas
 server.json      manifesto do registro MCP (name/version alinhados ao package.json)
 scripts/gen-readme-assets.py  gerador dos diagramas do README
-docs/assets/     variantes clara e escura do diagrama
+docs/assets/     hero claro/escuro e diagrama de estrutura
 ```
 
 ## Família e agradecimentos

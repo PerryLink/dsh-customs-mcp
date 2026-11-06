@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-flow-dark.svg">
-  <img src="docs/assets/dsh-customs-mcp-flow-light.svg" width="100%" alt="Flujo de datos de dsh-customs-mcp: .docx → customs_read_docx → libro de filas rows[] → customs_check → informe (hallazgos y comprobaciones no ejecutadas); customs_schema devuelve el contrato de columnas y sus alias, customs_rulebook devuelve las siete reglas y su cobertura">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-hero-en-dark.webp">
+  <img src="docs/assets/dsh-customs-mcp-hero-en-light.webp" width="100%" alt="Portada de dsh-customs-mcp: sesión del cliente a la izquierda, la frontera stdio JSON-RPC en el centro, las cuatro herramientas del servidor (customs_schema, customs_rulebook, customs_read_docx, customs_check) a la derecha y el informe Markdown — hallazgos + comprobaciones no ejecutadas — volviendo al cliente">
 </picture>
 
 # dsh-customs-mcp
@@ -34,6 +34,11 @@ npx -y dsh-customs-mcp     # o ejecutarlo sin instalar nada
 El servidor hace una sola cosa: toma un libro de aduanas que ya has montado y comprueba, fila por fila, si el libro se contradice a sí mismo. La entrada es el libro (`{ "rows": [...] }` o un array plano; JSON y YAML valen igual). La salida es un informe Markdown en el que cada hallazgo lleva número de fila, nombre de campo, valor encontrado, lo que la comprobación esperaba, la cláusula en la que se apoya y una sugerencia de dónde mirar; el informe termina siempre con una sección que enumera las comprobaciones que no se ejecutaron y por qué.
 
 No decide si una declaración es veraz, si una clasificación es correcta ni si hay derechos que pagar. Eso corresponde a la aduana y a los especialistas en clasificación, y no decidirlo es deliberado.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-customs-mcp-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-customs-mcp-flow-v5-light.svg" width="100%" alt="Estructura: dos entradas — el libro JSON/YAML directo y el .docx leído por customs_read_docx y convertido en libro — confluyen en un motor check.mjs: 68 alias a 17 campos de fila y 5 de cabecera, luego las siete reglas (todas warn); la salida son dos secciones fijas — hallazgos y comprobaciones no ejecutadas — tras la compuerta de redacción, en un informe Markdown">
+</picture>
 
 ## Instalación en tres pasos
 
@@ -288,11 +293,11 @@ node src/check.mjs --schema                        # el contrato de columnas y t
 node src/check.mjs --rulebook                      # las reglas y la cobertura
 node src/check.mjs test/fixtures/ledger-bad.json   # 6 hallazgos, código de salida 1; --json para informe estructurado
 
-python scripts/gen-readme-assets.py                # regenera los diagramas claro/oscuro de docs/assets (Pillow)
+python scripts/gen-readme-assets.py                # regenera los hero webp y los SVG de estructura en docs/assets (Pillow)
 docker build -t dsh-customs-mcp .                  # opcional: imagen node:22-alpine, entrada src/index.js
 ```
 
-No hay `npm install` ni paso de compilación: el repositorio no tiene dependencias y `src/` es lo que se publica. Los diagramas del README los genera [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) (Pillow y una sonda de fuente CJK; el diagrama solo lleva tokens de comando) y se puede volver a ejecutar sin riesgo.
+No hay `npm install` ni paso de compilación: el repositorio no tiene dependencias y `src/` es lo que se publica. Las imágenes del README las genera [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) (Pillow dibuja los hero, la estructura es SVG escrito a mano y hay una sonda de fuente CJK) y se puede volver a ejecutar sin riesgo.
 
 Estructura:
 
@@ -304,7 +309,7 @@ src/docx.mjs     extracción de texto .docx: párrafos, filas de tabla, marcas d
 test/smoke.mjs   prueba de humo: manifiestos, respuestas del protocolo, cuatro herramientas, rechazos, sin red ni escrituras
 server.json      manifiesto del registro MCP (name/version alineados con package.json)
 scripts/gen-readme-assets.py  generador de los diagramas del README
-docs/assets/     variantes clara y oscura del diagrama
+docs/assets/     hero claro/oscuro y diagrama de estructura
 ```
 
 ## Familia y agradecimientos

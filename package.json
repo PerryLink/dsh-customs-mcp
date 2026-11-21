@@ -13,6 +13,7 @@
     "README.md",
     "README.en.md",
     "CHANGELOG.md",
+    "docs/assets/*",
     "LICENSE"
   ],
   "engines": {

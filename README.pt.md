@@ -40,6 +40,11 @@ Não decide se uma declaração é verdadeira, se uma classificação está corr
   <img src="docs/assets/dsh-customs-mcp-flow-v5-light.svg" width="100%" alt="Estrutura: duas entradas — o livro JSON/YAML direto e o .docx lido por customs_read_docx e montado em livro — convergem num motor check.mjs: 68 apelidos para 17 campos de linha e 5 de cabeçalho, depois as sete regras (todas warn); a saída são duas seções fixas — achados e verificações não executadas — após o portão de redação, num relatório Markdown">
 </picture>
 
+![dsh-customs-mcp: execução real de terminal](docs/assets/dsh-customs-mcp-demo.gif)
+
+*Repetição animada de uma execução real deste repositório (2026-11-21).*
+
+
 ## Instalação em três passos
 
 ### 1. Instalar

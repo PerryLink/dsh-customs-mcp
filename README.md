@@ -42,6 +42,11 @@ npx -y dsh-customs-mcp     # 或者免安装直接跑
 
 ## 三步上手
 
+
+![dsh-customs-mcp 真实终端运行](docs/assets/dsh-customs-mcp-demo.gif)
+
+*本仓库真实运行的动图回放（2026-11-21）。*
+
 ### 1. 安装
 
 ```sh

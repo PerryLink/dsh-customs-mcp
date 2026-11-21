@@ -42,6 +42,11 @@ It does not decide whether a declaration is truthful, whether a classification i
 
 ## Three-step setup
 
+
+![dsh-customs-mcp: real terminal run](docs/assets/dsh-customs-mcp-demo.gif)
+
+*Animated replay of a real run in this repository (2026-11-21).*
+
 ### 1. Install
 
 ```sh
